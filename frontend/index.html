@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link 
+    rel="stylesheet" 
+    href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="style.css">
+
+    <title>Users Search</title>
+</head>
+<body>
+    <header>
+        <h1>Users Search</h1>
+        <div id="spinner" class="flex-row">
+        <div class="preloader-wrapper small active">
+            <div class="spinner-layer spinner-red-only">
+              <div class="circle-clipper left">
+                <div class="circle"></div>
+              </div><div class="gap-patch">
+                <div class="circle"></div>
+              </div><div class="circle-clipper right">
+                <div class="circle"></div>
+              </div>
+            </div>
+          </div>
+          <span>Processing...</span>
+        </div>
+    </header>
+    <main>
+        <div class="inputFilter">
+            <input type="text">
+            <button></button>
+        </div>
+
+        <section class="foundUsers">
+            <h2>users found</h2>
+
+            <div id="users">Users</div>
+            <img src="" alt="">
+
+        </section>
+
+        <section class="foundStatistics">
+            <h2>Statistics</h2>
+            <p>Male:</p>
+            <p>Female:</p>
+            <p>Sum of ages:</p>
+            <p>Average age:</p>
+
+        </section>
+        
+    </main>
+    
+    <script defer src="script.js"></script>
+</body>
+</html>
