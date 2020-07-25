@@ -1,0 +1,60 @@
+:root{
+    --color-pink: rgb(192, 13, 73);
+}
+*{
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+body{
+    background-color: rgb(255, 232, 236);
+    color: var(--color-pink);
+    padding: 60px;    
+}
+
+h1{
+    text-align: center;    
+}
+
+.flex-row{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.flex-center{
+    align-items: center;
+    justify-content: center;
+}
+
+#buttonFilter{
+    background-color: var(--color-pink);
+    color: white;
+    font-weight: bold;
+}
+
+#buttonFilter:hover{
+    background-color: white;
+    color: var(--color-pink);
+    font-weight: bold;
+}
+
+.content{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+.user{
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+    align-items: center;
+}
+
+img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-left: 80px;
+}

@@ -14,7 +14,7 @@
     <header>
         <h1>Users Search</h1>
 
-        <div id="spinner" class="flex-row">
+        <div id="spinner" class="flex-row flex-center">
             <div class="preloader-wrapper small active">
                 <div class="spinner-layer spinner-red-only">
                 <div class="circle-clipper left">
@@ -26,13 +26,17 @@
                 </div>
             </div>
         </div>
-          <span>Processing...</span>
+          <span style="margin-left:10px;">Processing...</span>
         </div>
     </header>
     <main>
-        <div class="inputFilter">
-            <input type="text">
-            <button></button>
+        <div class="flex-row flex-center">
+            <input type="text" id="inputFilter" placeholder="Find an user">
+            <button 
+            id="buttonFilter" 
+            class="waves-effect waves-light btn"
+            style="margin-left:20px;"
+            >Search</button>
         </div>
 
         <div class="content">
@@ -49,7 +53,7 @@
                 <p>Sum of ages: <span id="sumAges"></span></p>
                 <p>Average age: <span id="averageAge"></span></p>
             </div>
-            
+
         </div>
         
     </main>

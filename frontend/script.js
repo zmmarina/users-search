@@ -6,10 +6,22 @@ let sumAges = 0;
 let averageAge = 0;
 
 async function start(){
-    await fetchUsers();
+    await promiseUsers();
 
     hideSpinner();
     render();
+
+    configFilter();
+}
+
+function promiseUsers(){
+    return new Promise (async (resolve, reject)=> {
+        const users = await fetchUsers();
+
+        setTimeout(()=>{
+            resolve(users);
+        }, 1500);    
+    });
 }
 
 async function fetchUsers(){
@@ -18,7 +30,6 @@ async function fetchUsers(){
     globalUsers = json.map (user =>{
         
         return {
-            id: user.login.uuid,
             name: user.name,
             picture: user.picture.large,
             age: user.dob.age,
@@ -42,7 +53,7 @@ function renderUsers(){
     let usersHTML = '<div>';
 
     globalUsers.forEach(user=>{
-        const { id, name, picture, age, gender} = user;
+        const { name, picture, age, gender} = user;
  
         const userHTML = `
         <div class='user'>
@@ -87,9 +98,12 @@ function renderStatistics(){
     },0);
     sumAges.textContent = totalAges;
 
-    averageAge.textContent = totalAges/globalUsers.length;
+    averageAge.textContent = totalAges/globalUsers.length;          
+}
 
-          
+function configFilter(){
+    const buttonFilter = document.querySelector("#buttonFilter");
+    const inputFilter = document.querySelector("#inputFilter");
 }
 
 start();
