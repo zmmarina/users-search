@@ -1,10 +1,5 @@
 let globalUsers = [];
 let globalFilteredUsers = [];
-let countUsers = 0;
-let countMales = 0;
-let countFemales = 0;
-let sumAges = 0;
-let averageAge = 0;
 
 async function start(){
     await fetchUsers();
@@ -39,9 +34,12 @@ function hideSpinner(){
 }
 
 function render(){
+    
     renderUsers();
     renderTitle();  
     renderStatistics();
+    activateInput();
+    clearInput();
 };
 
 function renderUsers(){
@@ -69,7 +67,12 @@ function renderUsers(){
 
 function renderTitle(){
     const countUsers = document.querySelector("#countUsers");
-    countUsers.textContent = globalFilteredUsers.length;
+
+    if (globalFilteredUsers.length >= 1){
+        countUsers.textContent = `${globalFilteredUsers.length} users found`;
+    } else{
+        countUsers.textContent = "No user found!"
+    }    
 }
 
 function renderStatistics(){
@@ -78,38 +81,76 @@ function renderStatistics(){
     const mappedGenders = globalFilteredUsers.map(user=> user.gender);
     const sumAges = document.querySelector("#sumAges");
     const averageAge = document.querySelector("#averageAge");
+    const noData = document.querySelector("#noData");
 
+    if (globalFilteredUsers.length >= 1){
+        let male = mappedGenders.filter(gender => {
+            return gender === "male"});
+        countMales.textContent = `Male: ${male.length}`;
+    
+        let female = mappedGenders.filter(gender => {
+            return gender === "female"});
+        countFemales.textContent = `Female: ${female.length}`;
+    
+        const totalAges = globalFilteredUsers.reduce((acc,curr)=>{
+            return acc + curr.age;
+        },0);
+        sumAges.textContent = `Sum of ages: ${totalAges}`;
 
-    let male = mappedGenders.filter(gender => {
-        return gender === "male"});
-    countMales.textContent = male.length;
+        const avAge = (totalAges/globalFilteredUsers.length).toFixed(2);
+    
+        averageAge.textContent = `Average age: ${avAge}`;
 
-    let female = mappedGenders.filter(gender => {
-        return gender === "female"});
-    countFemales.textContent = female.length;
-
-    const totalAges = globalFilteredUsers.reduce((acc,curr)=>{
-        return acc + curr.age;
-    },0);
-    sumAges.textContent = totalAges;
-
-    averageAge.textContent = totalAges/globalFilteredUsers.length;          
+    } else {
+       noData.textContent = "No data to show";
+       countMales.classList.add('hide');
+       countFemales.classList.add('hide');
+       sumAges.classList.add('hide');
+       averageAge.classList.add('hide');
+    }    
+        
+  
 }
 
 function configFilter(){
     const buttonFilter = document.querySelector("#buttonFilter");
-    buttonFilter.addEventListener("click", ()=>{
-        const inputFilter = document.querySelector("#inputFilter");
-        const filterValue = inputFilter.value.toLowerCase().trim();
+    const inputFilter = document.querySelector("#inputFilter");
 
-        globalFilteredUsers = globalUsers.filter((user)=>{
-            return user.name.toLowerCase().includes(filterValue)
-        });
-        
-    render();
-   
-    });
-   
+    inputFilter.addEventListener("keyup", handleKeyUp);
+    buttonFilter.addEventListener("click", handleButton);  
+
 }
+
+function handleButton(){
+    const inputFilter = document.querySelector("#inputFilter");
+    const filterValue = inputFilter.value.toLowerCase().trim();
+
+    globalFilteredUsers = globalUsers.filter((user)=>{
+        return user.name.toLowerCase().includes(filterValue)
+    });
+        
+    render(); 
+    clearInput();
+}
+
+function handleKeyUp(event){
+    const {key} = event;
+
+    if (key !== "Enter"){
+        return;
+    }
+
+    handleButton();
+} 
+
+function activateInput(){
+    inputFilter.focus();
+}
+
+function clearInput(){
+    inputFilter.value = "";
+    inputFilter.focus();
+}
+
 
 start();
