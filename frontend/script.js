@@ -1,4 +1,5 @@
 let globalUsers = [];
+let globalFilteredUsers = [];
 let countUsers = 0;
 let countMales = 0;
 let countFemales = 0;
@@ -6,36 +7,30 @@ let sumAges = 0;
 let averageAge = 0;
 
 async function start(){
-    await promiseUsers();
-
+    await fetchUsers();
     hideSpinner();
     render();
-
     configFilter();
-}
-
-function promiseUsers(){
-    return new Promise (async (resolve, reject)=> {
-        const users = await fetchUsers();
-
-        setTimeout(()=>{
-            resolve(users);
-        }, 1500);    
-    });
 }
 
 async function fetchUsers(){
     const response = await fetch("http://localhost:3001/users");
     const json = await response.json();
-    globalUsers = json.map (user =>{
+    globalUsers = json.map ((user) =>{
         
         return {
-            name: user.name,
+            name: `${user.name.first} ${user.name.last}`,
             picture: user.picture.large,
             age: user.dob.age,
             gender: user.gender
         };
-    });     
+    });  
+   
+    globalUsers.sort((a, b)=>{
+        return a.name.localeCompare(b.name);
+    });
+
+    globalFilteredUsers = [...globalUsers];
 }
 
 function hideSpinner(){
@@ -52,7 +47,7 @@ function render(){
 function renderUsers(){
     let usersHTML = '<div>';
 
-    globalUsers.forEach(user=>{
+    globalFilteredUsers.forEach(user=>{
         const { name, picture, age, gender} = user;
  
         const userHTML = `
@@ -61,7 +56,7 @@ function renderUsers(){
              <img src="${picture}" alt="${name}">
          </div>
          <div>
-             ${name.first} ${name.last}, ${age} years
+             ${name}, ${age} years
          </div>         
         </div>       
         `;
@@ -74,13 +69,13 @@ function renderUsers(){
 
 function renderTitle(){
     const countUsers = document.querySelector("#countUsers");
-    countUsers.textContent = globalUsers.length;
+    countUsers.textContent = globalFilteredUsers.length;
 }
 
 function renderStatistics(){
     const countMales = document.querySelector("#countMales");
     const countFemales = document.querySelector("#countFemales");
-    const mappedGenders = globalUsers.map(user=> user.gender);
+    const mappedGenders = globalFilteredUsers.map(user=> user.gender);
     const sumAges = document.querySelector("#sumAges");
     const averageAge = document.querySelector("#averageAge");
 
@@ -93,17 +88,28 @@ function renderStatistics(){
         return gender === "female"});
     countFemales.textContent = female.length;
 
-    const totalAges = globalUsers.reduce((acc,curr)=>{
+    const totalAges = globalFilteredUsers.reduce((acc,curr)=>{
         return acc + curr.age;
     },0);
     sumAges.textContent = totalAges;
 
-    averageAge.textContent = totalAges/globalUsers.length;          
+    averageAge.textContent = totalAges/globalFilteredUsers.length;          
 }
 
 function configFilter(){
     const buttonFilter = document.querySelector("#buttonFilter");
-    const inputFilter = document.querySelector("#inputFilter");
+    buttonFilter.addEventListener("click", ()=>{
+        const inputFilter = document.querySelector("#inputFilter");
+        const filterValue = inputFilter.value.toLowerCase().trim();
+
+        globalFilteredUsers = globalUsers.filter((user)=>{
+            return user.name.toLowerCase().includes(filterValue)
+        });
+        
+    render();
+   
+    });
+   
 }
 
 start();
